@@ -1,0 +1,66 @@
+FROM python:3.12.8-slim AS builder
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends gettext
+RUN apt-get update
+
+ARG RDMO_WHEEL
+COPY ./rdmorganiser/rdmo/wheels/$RDMO_WHEEL .
+COPY requirements_dev.txt .
+
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements_dev.txt
+
+##################################################################
+FROM python:3.12.8-slim
+
+# Create the user rdmo
+ARG USERNAME=rdmo
+ARG USER_UID=1001
+ARG USER_GID=$USER_UID
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
+
+# create the appropriate directories
+ENV HOME=/home/$USERNAME
+ENV APP_HOME=/home/$USERNAME/rdmo-app
+RUN mkdir -p $HOME
+RUN mkdir $APP_HOME
+RUN mkdir $APP_HOME/static_root
+RUN mkdir $APP_HOME/vendor
+RUN mkdir ../../../var/log/$USERNAME
+WORKDIR $APP_HOME
+
+# install dependencies
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements_dev.txt .
+ARG RDMO_WHEEL
+COPY --from=builder /usr/src/app/$RDMO_WHEEL .
+RUN pip install --upgrade pip
+RUN pip install --no-cache /wheels/*
+RUN pip install "$RDMO_WHEEL[allauth,postgres]"
+
+# copy project
+COPY ./rdmorganiser/rdmo-app .
+COPY ./rdmorganiser/rdmo-plugins-github/rdmo_github ./rdmo_github
+COPY ./config_files/settings_test_dev.py ./config/settings/local.py
+
+COPY docker_entrypoint.dev.sh .
+
+# change permissions
+RUN chmod +x docker_entrypoint.dev.sh
+RUN chown -R $USERNAME:$USERNAME ../../../var/log/$USERNAME
+RUN chown -R $USERNAME:$USERNAME $APP_HOME/static_root
+RUN chown -R $USERNAME:$USERNAME $APP_HOME/vendor
+
+# change to rdmo user
+USER $USERNAME
+
+# Update path with rdmo path
+ENV PATH=$PATH:/home/$USERNAME/.local/bin
+
+# ENTRYPOINT ./docker_entrypoint.dev.sh
+ENTRYPOINT ["bash", "-c", "./docker_entrypoint.dev.sh"]

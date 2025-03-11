@@ -1,0 +1,23 @@
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile.local_dev
+    ports:
+     - "8002:8000"
+    volumes:
+     - ./rdmorganiser:/rdmorganiser
+    env_file:
+      - local_dev.env
+    depends_on:
+     - db
+    command: sleep infinity
+
+  db: # defaults to sqlite
+    image: "postgres:17"
+    ports:
+     - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    env_file:
+      - local_dev.env

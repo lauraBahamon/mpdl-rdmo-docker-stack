@@ -1,0 +1,2 @@
+pypandoc_binary==1.14
+build==1.2.2.post1

@@ -1,0 +1,7 @@
+*.env
+config_files/settings*
+*crt
+*key
+pgdata/*
+rdmorganiser/*
+README_backup.md

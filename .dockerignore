@@ -1,0 +1,9 @@
+*.env
+*nginx/
+pgdata/
+traefik/
+docker-compose*
+Dockerfile*
+README.md
+README_backup.md
+rdmorganiser/rdmo/node_modules

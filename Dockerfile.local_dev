@@ -1,0 +1,31 @@
+FROM node:20.18.0-bullseye
+
+# Create the user rdmo
+ARG USERNAME=rdmo
+ARG USER_UID=1001
+ARG USER_GID=$USER_UID
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
+
+USER root
+WORKDIR /rdmorganiser
+
+RUN apt-get update && apt-get install -y python3-pip gettext
+RUN pip install --upgrade pip setuptools 
+RUN apt-get update
+
+COPY requirements_local_dev.txt .
+RUN pip install -r requirements_local_dev.txt
+
+# Create logging directory and set rdmo user as owner
+RUN mkdir ../var/log/$USERNAME
+RUN chown -R $USERNAME:$USERNAME ../var/log/$USERNAME
+
+COPY ./rdmorganiser /rdmorganiser
+
+# Change to rdmo user
+USER $USERNAME
+
+ENV PATH=$PATH:/home/$USERNAME/.local/bin
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1

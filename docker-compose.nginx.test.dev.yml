@@ -1,0 +1,47 @@
+services:
+  nginx:
+    build: ./test_nginx
+    volumes:
+      - static_volume:/home/rdmo/rdmo-app/static_root
+      - vendor_volume:/home/rdmo/rdmo-app/vendor
+    ports:
+      - 8004:80
+      - 8003:443
+    depends_on:
+      - web
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test.dev
+    volumes:
+      - static_volume:/home/rdmo/rdmo-app/static_root
+      - vendor_volume:/home/rdmo/rdmo-app/vendor
+    expose:
+     - 8000
+    env_file:
+      - .env
+    command: sleep infinity
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+  db: # defaults to sqlite
+    image: "postgres:17"
+    restart: always
+    expose:
+      - 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}" ]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
+  static_volume:
+  vendor_volume:
