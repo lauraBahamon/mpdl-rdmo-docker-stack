@@ -3,7 +3,11 @@ docker configuration to develop and deploy rdmo
 
 # 1. Dev instance deployment
 
-## 1.0 Create env, settings file and certificate
+## 1.0 Folder structure, env, settings file and certificate
+
+### rdmorganiser/
+
+Create rdmorganiser/. It contains at least rdmo-app/ with the configuration files for rdmo. Every complementary app directory is located as a sibling or child directory of rdmo-app/.
 
 ### env
 ```
@@ -113,7 +117,11 @@ docker exec -it <id> sh -c 'pg_restore -U ${POSTGRES_USER} -d ${POSTGRES_USER} /
 
 # 3. Local development
 
-## 3.0 Clone repositories in rdmorganiser/ and create env
+## 3.0 Folder structure and env
+
+### rdmorganiser/
+
+Create rdmorganiser/. It contains at least rdmo-app/ with the configuration files for rdmo. Every complementary app directory is located as a sibling or child directory of rdmo-app/.
 
 ### env
 ```
