@@ -16,7 +16,6 @@ SECRET_KEY = asdf
 ALLOWED_HOSTS_STR = 'asdf ghjk qwer'
 DEFAULT_URI_PREFIX = https://bla.com/terms/
 STATIC_URL = /bla/
-STATIC_ROOT = /bla/
 
 # DB
 POSTGRES_PASSWORD = asdf
@@ -60,7 +59,7 @@ docker-compose -p rdmo-nginx-test-stack -f docker-compose.nginx.test.dev.yml up
 docker-compose -p rdmo-nginx-test-stack -f docker-compose.nginx.test.dev.yml down -v
 ```
 
-1.1.4 !!!! Discard changes of js app and rdmo wheel build !!!!
+1.1.4 !!!! Discard changes of js app !!!!
 
 1.1.5 Create super user
 ```(shell as container user of web container - first time)
@@ -123,7 +122,7 @@ docker exec -it <id> sh -c 'pg_restore -U ${POSTGRES_USER} -d ${POSTGRES_USER} /
 
 Create rdmorganiser/. It contains at least rdmo-app/ with the configuration files for rdmo. Every complementary app directory is located as a sibling or child directory of rdmo-app/.
 
-### env
+### local_dev.env
 ```
 # RDMO
 SECRET_KEY = asdf
