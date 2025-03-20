@@ -252,33 +252,3 @@ dest-path-to-file -> directory-name\file-name  mind back slashes for Windows pat
 pscp -load {putty session name} bahamon@{server}:{src-path-to-file} {dest-path-to-file}
 ```
 
-# 7. Useful links
-
-pad RDMO: https://docs.google.com/document/d/1HponofpqtMWqtywTNZHX6-5BgNQ6m4DwUy9r0p0M4-8/edit?tab=t.0
-
-für GitLab-Plugin: https://git.opencarp.org/openCARP/FACILE-RS
-
-Docker contexts: https://www.docker.com/blog/how-to-deploy-on-remote-docker-hosts-with-docker-compose/
-
-Dev deployment: https://betterstack.com/community/guides/scaling-python/dockerize-django/
-
-Production: https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
-
-Production with Traefik: https://testdriven.io/blog/django-docker-traefik/
-
-Docker best practices for python: https://testdriven.io/blog/docker-best-practices/
-
-Python guide in docker docs: https://docs.docker.com/guides/python/develop/
-
-https: https://www.digitalocean.com/community/tutorials/how-to-secure-a-containerized-node-js-application-with-nginx-let-s-encrypt-and-docker-compose
-
-self-signed SSL: https: //codingwithmanny.medium.com/configure-self-signed-ssl-for-nginx-docker-from-a-scratch-7c2bcd5478c6
-
-securityheaders.com /?q=dev-rdmo...&followRedirects=on
-
-import file size limits: https://docs.rackspace.com/docs/limit-file-upload-size-in-nginx, https://docs.djangoproject.com/en/4.2/ref/settings/#data-upload-max-number-fields
-
-docker watch command: https://www.docker.com/blog/docker-compose-experiment-sync-files-and-automatically-rebuild-services-with-watch-mode/
-
-Django REST framework: https://www.django-rest-framework.org/tutorial/quickstart/
-
