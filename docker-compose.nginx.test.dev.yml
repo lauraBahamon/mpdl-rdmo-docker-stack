@@ -19,8 +19,7 @@ services:
     expose:
      - 8000
     env_file:
-      - .env
-    command: sleep infinity
+      - nginx_test.env
     depends_on:
       db:
         condition: service_healthy
@@ -34,7 +33,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     env_file:
-      - .env
+      - nginx_test.env
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}" ]
       interval: 2s

@@ -39,22 +39,26 @@ GITHUB_CLIENT_SECRET_OAUTH_APP = asdf
 ### Save certificate in *nginx/ssl/certs/ and its key in *nginx/ssl/private/. Check Dockerfile* for file names or change them
 
 ## 1.1 Nginx test dev stack (local test for dev instance)
-1.1.1 Go to rdmo/ and create production front-end files
+1.1.0 Checkout to dev branch and merge all changes to deploy
+
+1.1.1 In dev stack, go to rdmo/ and create production front-end files
 ```shell  (as root user of **local dev web container** -> docker exec -it --user root {container id} /bin/bash)
 npm install
 npm run build:prod
 ```
 
-1.1.2 Go to rdmo/ and create whl rdmo file, then echo file path 
-```(shell as container user of **local dev web container** -> docker exec -it --user root {container id} /bin/bash)
+1.1.2 In dev stack, go to rdmo/ and {plugin_name}/ and create whl files, then echo file path 
+```(shell as container user of **local dev web container**)
 python3 -m build --wheel --outdir wheels
 RDMO_WHEEL=$(ls ./wheels/*.whl | sort -V | tail -n 1) && echo "$RDMO_WHEEL"
 ```
 
 1.1.3 Deploy
 ```
-RDMO_WHEEL=file name in RDMO_WHEEL from last step
-docker-compose -p rdmo-nginx-test-stack -f docker-compose.nginx.test.dev.yml build --build-arg RDMO_WHEEL=RDMO_WHEEL
+RDMO_WHEEL from last step
+RDMO_GITHUB_WHEEL from last step
+RDMO_GITLAB_WHEEL from last step
+docker-compose -p rdmo-nginx-test-stack -f docker-compose.nginx.test.dev.yml build --build-arg RDMO_WHEEL=RDMO_WHEEL --build-arg RDMO_GITHUB_WHEEL=RDMO_GITHUB_WHEEL --build-arg RDMO_GITLAB_WHEEL=RDMO_GITLAB_WHEEL
 docker-compose -p rdmo-nginx-test-stack -f docker-compose.nginx.test.dev.yml up
 docker-compose -p rdmo-nginx-test-stack -f docker-compose.nginx.test.dev.yml down -v
 ```
@@ -72,7 +76,7 @@ Follow steps as in 1.1 but use these docker commands instead of those in 1.1.3
 ```
 docker context create rdmo-dev-instance (first time)
 docker context use rdmo-dev-instance 
-docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml build --build-arg RDMO_WHEEL=RDMO_WHEEL
+docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml build --build-arg RDMO_WHEEL=RDMO_WHEEL --build-arg RDMO_GITHUB_WHEEL=RDMO_GITHUB_WHEEL --build-arg RDMO_GITLAB_WHEEL=RDMO_GITLAB_WHEEL
 docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml up
 docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml down -v
 ```

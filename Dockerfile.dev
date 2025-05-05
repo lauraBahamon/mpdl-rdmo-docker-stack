@@ -9,7 +9,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends gettext
 RUN apt-get update
 
 ARG RDMO_WHEEL
+ARG RDMO_GITHUB_WHEEL
+ARG RDMO_GITLAB_WHEEL
 COPY ./rdmorganiser/rdmo/wheels/$RDMO_WHEEL .
+COPY ./rdmorganiser/rdmo-plugins-github/wheels/$RDMO_GITHUB_WHEEL .
+COPY ./rdmorganiser/rdmo-plugins-gitlab/wheels/$RDMO_GITLAB_WHEEL .
 COPY requirements_dev.txt .
 
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements_dev.txt
@@ -38,14 +42,17 @@ WORKDIR $APP_HOME
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements_dev.txt .
 ARG RDMO_WHEEL
+ARG RDMO_GITHUB_WHEEL
+ARG RDMO_GITLAB_WHEEL
 COPY --from=builder /usr/src/app/$RDMO_WHEEL .
+COPY --from=builder /usr/src/app/$RDMO_GITHUB_WHEEL .
+COPY --from=builder /usr/src/app/$RDMO_GITLAB_WHEEL .
 RUN pip install --upgrade pip
 RUN pip install --no-cache /wheels/*
-RUN pip install "$RDMO_WHEEL[allauth,postgres]"
+RUN pip install "$RDMO_WHEEL[allauth,postgres]" $RDMO_GITHUB_WHEEL $RDMO_GITLAB_WHEEL
 
 # copy project
 COPY ./rdmorganiser/rdmo-app .
-COPY ./rdmorganiser/rdmo-plugins-github/rdmo_github ./rdmo_github
 COPY ./config_files/settings_dev.py ./config/settings/local.py
 
 COPY docker_entrypoint.dev.sh .
