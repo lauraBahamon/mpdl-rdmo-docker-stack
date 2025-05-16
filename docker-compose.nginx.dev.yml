@@ -1,5 +1,6 @@
 services:
   nginx:
+    restart: unless-stopped
     build: ./nginx
     volumes:
       - static_volume:/home/rdmo/rdmo-app/static_root

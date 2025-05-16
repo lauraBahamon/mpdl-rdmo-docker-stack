@@ -77,7 +77,7 @@ Follow steps as in 1.1 but use these docker commands instead of those in 1.1.3
 docker context create rdmo-dev-instance (first time)
 docker context use rdmo-dev-instance 
 docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml build --build-arg RDMO_WHEEL=RDMO_WHEEL --build-arg RDMO_GITHUB_WHEEL=RDMO_GITHUB_WHEEL --build-arg RDMO_GITLAB_WHEEL=RDMO_GITLAB_WHEEL
-docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml up
+docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml up -d
 docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml down -v
 ```
 
