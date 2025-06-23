@@ -56,10 +56,8 @@ RDMO_WHEEL=$(ls ./wheels/*.whl | sort -V | tail -n 1) && echo "$RDMO_WHEEL"
 1.1.3 Deploy
 ```
 RDMO_WHEEL from last step
-RDMO_GITHUB_WHEEL from last step
-RDMO_GITLAB_WHEEL from last step
-RDMO_MAUS_WHEEL from last step
-docker-compose -p rdmo-nginx-test-stack -f docker-compose.nginx.test.dev.yml build --build-arg RDMO_WHEEL=RDMO_WHEEL --build-arg RDMO_GITHUB_WHEEL=RDMO_GITHUB_WHEEL --build-arg RDMO_GITLAB_WHEEL=RDMO_GITLAB_WHEEL --build-arg RDMO_MAUS_WHEEL=RDMO_MAUS_WHEEL
+RDMO_*_WHEEL from last step
+docker-compose -p rdmo-nginx-test-stack -f docker-compose.nginx.test.dev.yml build --build-arg RDMO_WHEEL=RDMO_WHEEL --build-arg RDMO_GITHUB_WHEEL=RDMO_GITHUB_WHEEL --build-arg RDMO_GITLAB_WHEEL=RDMO_GITLAB_WHEEL --build-arg RDMO_MAUS_WHEEL=RDMO_MAUS_WHEEL --build-arg RDMO_ORCID_WHEEL=RDMO_ORCID_WHEEL --build-arg RDMO_ROR_WHEEL=RDMO_ROR_WHEEL
 docker-compose -p rdmo-nginx-test-stack -f docker-compose.nginx.test.dev.yml up
 docker-compose -p rdmo-nginx-test-stack -f docker-compose.nginx.test.dev.yml down -v
 ```
@@ -77,8 +75,8 @@ Follow steps as in 1.1 but use these docker commands instead of those in 1.1.3
 ```
 docker context create rdmo-dev-instance (first time)
 docker context use rdmo-dev-instance 
-docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml build --build-arg RDMO_WHEEL=RDMO_WHEEL --build-arg RDMO_GITHUB_WHEEL=RDMO_GITHUB_WHEEL --build-arg RDMO_GITLAB_WHEEL=RDMO_GITLAB_WHEEL --build-arg RDMO_MAUS_WHEEL=RDMO_MAUS_WHEEL
-docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml up -d
+docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml build nginx web --build-arg RDMO_WHEEL=RDMO_WHEEL --build-arg RDMO_GITHUB_WHEEL=RDMO_GITHUB_WHEEL --build-arg RDMO_GITLAB_WHEEL=RDMO_GITLAB_WHEEL --build-arg RDMO_MAUS_WHEEL=RDMO_MAUS_WHEEL --build-arg RDMO_ORCID_WHEEL=RDMO_ORCID_WHEEL --build-arg RDMO_ROR_WHEEL=RDMO_ROR_WHEEL
+docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml up nginx web -d
 docker-compose -p rdmo-nginx-stack -f docker-compose.nginx.dev.yml down -v
 ```
 
@@ -168,7 +166,7 @@ Go to rdmo-app/ and:
 
 ```shell (as container user)
 >> pip install -e ../"rdmo[allauth,postgres]"
->> python3 manage.py download_vendor_files
+>> # python3 manage.py download_vendor_files
 >> python3 manage.py migrate
 >> python3 manage.py createsuperuser
 ```

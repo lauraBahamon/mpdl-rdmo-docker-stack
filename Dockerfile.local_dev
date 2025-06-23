@@ -1,4 +1,4 @@
-FROM node:20.18.0-bullseye
+FROM node:24.2.0
 
 # Create the user rdmo
 ARG USERNAME=rdmo
@@ -10,9 +10,15 @@ RUN groupadd --gid $USER_GID $USERNAME \
 USER root
 WORKDIR /rdmorganiser
 
-RUN apt-get update && apt-get install -y python3-pip gettext
-RUN pip install --upgrade pip setuptools 
+RUN apt-get update && apt-get install -y python3-pip python3-venv gettext
+# RUN pip install --upgrade pip setuptools
 RUN apt-get update
+
+# Upgrade pip and create venv
+RUN python3 -m venv /opt/venv
+
+# Add venv to path
+ENV PATH="/opt/venv/bin:$PATH"
 
 COPY requirements_local_dev.txt .
 RUN pip install -r requirements_local_dev.txt
@@ -20,6 +26,7 @@ RUN pip install -r requirements_local_dev.txt
 # Create logging directory and set rdmo user as owner
 RUN mkdir ../var/log/$USERNAME
 RUN chown -R $USERNAME:$USERNAME ../var/log/$USERNAME
+RUN chown -R $USERNAME:$USERNAME ../opt/venv
 
 COPY ./rdmorganiser /rdmorganiser
 

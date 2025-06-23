@@ -12,10 +12,14 @@ ARG RDMO_WHEEL
 ARG RDMO_GITHUB_WHEEL
 ARG RDMO_GITLAB_WHEEL
 ARG RDMO_MAUS_WHEEL
+ARG RDMO_ORCID_WHEEL
+ARG RDMO_ROR_WHEEL
 COPY ./rdmorganiser/rdmo/wheels/$RDMO_WHEEL .
 COPY ./rdmorganiser/rdmo-plugins-github/wheels/$RDMO_GITHUB_WHEEL .
 COPY ./rdmorganiser/rdmo-plugins-gitlab/wheels/$RDMO_GITLAB_WHEEL .
 COPY ./rdmorganiser/rdmo-plugins-maus/wheels/$RDMO_MAUS_WHEEL .
+COPY ./rdmorganiser/rdmo-plugins-orcid/wheels/$RDMO_ORCID_WHEEL .
+COPY ./rdmorganiser/rdmo-plugins-ror/wheels/$RDMO_ROR_WHEEL .
 COPY requirements_dev.txt .
 
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements_dev.txt
@@ -47,13 +51,17 @@ ARG RDMO_WHEEL
 ARG RDMO_GITHUB_WHEEL
 ARG RDMO_GITLAB_WHEEL
 ARG RDMO_MAUS_WHEEL
+ARG RDMO_ORCID_WHEEL
+ARG RDMO_ROR_WHEEL
 COPY --from=builder /usr/src/app/$RDMO_WHEEL .
 COPY --from=builder /usr/src/app/$RDMO_GITHUB_WHEEL .
 COPY --from=builder /usr/src/app/$RDMO_GITLAB_WHEEL .
 COPY --from=builder /usr/src/app/$RDMO_MAUS_WHEEL .
+COPY --from=builder /usr/src/app/$RDMO_ORCID_WHEEL .
+COPY --from=builder /usr/src/app/$RDMO_ROR_WHEEL .
 RUN pip install --upgrade pip
 RUN pip install --no-cache /wheels/*
-RUN pip install "$RDMO_WHEEL[allauth,postgres]" $RDMO_GITHUB_WHEEL $RDMO_GITLAB_WHEEL $RDMO_MAUS_WHEEL
+RUN pip install "$RDMO_WHEEL[allauth,postgres]" $RDMO_GITHUB_WHEEL $RDMO_GITLAB_WHEEL $RDMO_MAUS_WHEEL $RDMO_ORCID_WHEEL $RDMO_ROR_WHEEL
 
 # copy project
 COPY ./rdmorganiser/rdmo-app .
